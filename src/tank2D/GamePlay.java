@@ -89,6 +89,7 @@ public class GamePlay extends JPanel implements ActionListener{
 
             player2.paintIcon(this, g, player2X, player2Y);
 
+            // draw the bullet movement of player 1
             if(player1Bullet != null && player1Shoot) {
                 if (bulletShootDir1.equals("")) {
                     if(player1Up) bulletShootDir1 = "up";
@@ -99,7 +100,7 @@ public class GamePlay extends JPanel implements ActionListener{
                     player1Bullet.move(bulletShootDir1);
                     player1Bullet.draw(g);
                 }
-
+                // check if the bullet of player 1 hit player 2
                 if(new Rectangle(player1Bullet.getX(), player1Bullet.getY(), 10, 10).intersects(new Rectangle(player2X, player2Y, 50, 50))) {
                     player1Score += 10;
                     player2Lives -= 1;
@@ -107,13 +108,13 @@ public class GamePlay extends JPanel implements ActionListener{
                     player1Shoot = false;
                     bulletShootDir1 = "";
                 }
-
+                //  check if the bullet of player 1 hit solid bricks or breakable  bricks
                 if(brick.checkCollision(player1Bullet.getX(), player1Bullet.getY()) || brick.checkSolidCollision(player1Bullet.getX(), player1Bullet.getY())) {
                     player1Bullet = null;
                     player1Shoot = false;
                     bulletShootDir1 = "";
                 }
-
+                // check if the bullet of player 1 hit the edges
                 if(player1Bullet.getY()<1
                         || player1Bullet.getY() >580
                         || player1Bullet.getX() <1
@@ -123,7 +124,7 @@ public class GamePlay extends JPanel implements ActionListener{
                     bulletShootDir1 = "";
                 }
             }
-
+            // draw the bullet movement of player 2
             if(player2Bullet != null && player2Shoot) {
                 if(bulletShootDir2.equals("")) {
                     if(player2Up) bulletShootDir2 = "up";
@@ -134,7 +135,7 @@ public class GamePlay extends JPanel implements ActionListener{
                     player2Bullet.move(bulletShootDir2);
                     player2Bullet.draw(g);
                 }
-
+                // check if player2's bullet hit player 1
                 if(new Rectangle(player2Bullet.getX(), player2Bullet.getY(), 10, 10)
                         .intersects(new Rectangle(player1X, player1Y, 50, 50))) {
                     player2Score += 10;
@@ -143,14 +144,14 @@ public class GamePlay extends JPanel implements ActionListener{
                     player2Shoot = false;
                     bulletShootDir2 = "";
                 }
-
+                // check if player 2's bullet hit solid or breakable bricks
                 if(brick.checkCollision(player2Bullet.getX(), player2Bullet.getY())
                         || brick.checkSolidCollision(player2Bullet.getX(), player2Bullet.getY())) {
                     player2Bullet = null;
                     player2Shoot = false;
                     bulletShootDir2 = "";
                 }
-
+                // check if player 2's bullet hit the edges
                 if(player2Bullet.getY() < 1
                     || player2Bullet.getY() >580
                     || player2Bullet.getX() <1
@@ -173,6 +174,7 @@ public class GamePlay extends JPanel implements ActionListener{
         g.drawString("Player 1: "+player1Lives, 670, 180);
         g.drawString("Player 2: "+player2Lives, 670, 210);
 
+        // stop the game if the hp of player 1 or 2 reach 0
         if (player1Lives == 0) {
             g.setColor(Color.white);
             g.setFont(new Font("Ink Free", Font.BOLD, 60));
@@ -202,6 +204,10 @@ public class GamePlay extends JPanel implements ActionListener{
         repaint();
     }
 
+    // set the key listener for both players
+    // player 1: W, A, S, D for moving, U for shooting
+    // player 2: arrow keys for moving, M for shooting
+    // Space to restart if a player's hp reach 0
     private class Player1Listener implements KeyListener{
         @Override
         public void keyTyped(KeyEvent e) {}
